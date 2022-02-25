@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Basics Examples</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Open+Sans:wght@300&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <h1>Example 1</h1>
+    <div id="hello-example"></div>
+    <h1 >Example 2</h1>
+    <div id="timer-example"></div>
+    <h1>Example 3</h1>
+    <div id="todos-example"></div>
+    <h1>Example 4</h1>
+    <div id="markdown-example"></div>
+    
+    <script type="text/babel">
+
+        //Example 1 from react.org
+        class HelloMessage extends React.Component {
+            render() {
+                return React.createElement(
+                    "div",
+                    null,
+                    "Hello ",
+                    this.props.name
+                );
+            }
+        }
+
+        //Example 2
+        class Timer extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { seconds: 0 };
+            }
+
+            tick() {
+                this.setState(state => ({
+                    seconds: state.seconds + 1
+                }));
+            }
+
+            componentDidMount() {
+                this.interval = setInterval(() => this.tick(), 1000);
+            }
+            componentWillUnmount() {
+                clearInterval(this.interval);
+            }
+
+            render() {
+                return (
+                    <div>
+                        Seconds: {this.state.seconds}
+                    </div>
+                );
+            }
+        }
+
+        //Example 3
+        class TodoApp extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { items: [], text: '' };
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h3>TODO</h3>
+                        <TodoList items={this.state.items} />
+                        <form onSubmit={this.handleSubmit}>
+                            <label htmlFor="new-todo">
+                                What needs to be done?
+                            </label>
+                            <input
+                                id="new-todo"
+                                onChange={this.handleChange}
+                                value={this.state.text}
+                            />
+                            <button>
+                                Add #{this.state.items.length + 1}
+                            </button>
+                        </form>
+                    </div>
+                );
+            }
+
+            handleChange(e) {
+                this.setState({ text: e.target.value });
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                if (this.state.text.length === 0) {
+                    return;
+                }
+                const newItem = {
+                    text: this.state.text,
+                    id: Date.now()
+                };
+                this.setState(state => ({
+                    items: state.items.concat(newItem),
+                    text: ''
+                }));
+            }
+        }
+
+        class TodoList extends React.Component {
+            render() {
+                return (
+                    <ul>
+                        {this.props.items.map(item => (
+                            <li key={item.id}>{item.text}</li>
+                        ))}
+                    </ul>
+                );
+            }
+        }
+
+        //Example 4
+        class MarkdownEditor extends React.Component {
+            constructor(props) {
+                super(props);
+                this.md = new Remarkable();
+                this.handleChange = this.handleChange.bind(this);
+                this.state = { value: 'Hello, **world**!' };
+            }
+
+            handleChange(e) {
+                this.setState({ value: e.target.value });
+            }
+
+            getRawMarkup() {
+                return { __html: this.md.render(this.state.value) };
+            }
+            render() {
+                return (
+                    <div className="MarkdownEditor">
+                        <h3>Input</h3>
+                        <label htmlFor="markdown-content">
+                            Enter some markdown
+                        </label>
+                        <textarea
+                            id="markdown-content"
+                            onChange={this.handleChange}
+                            defaultValue={this.state.value}
+                        />
+                        <h3>Output</h3>
+                        <div
+                            className="content"
+                            dangerouslySetInnerHTML={this.getRawMarkup()}
+                        />
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <MarkdownEditor />,
+            document.getElementById('markdown-example')
+        );
+
+        ReactDOM.render(
+            <TodoApp />,
+            document.getElementById('todos-example')
+        );
+
+        ReactDOM.render(
+            <Timer />,
+            document.getElementById('timer-example')
+        );
+
+        ReactDOM.render(
+            <HelloMessage name="Taylor" />,
+            document.getElementById('hello-example')
+        );
+
+
+    </script>
+
+</body>
+
+</html>
