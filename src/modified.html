@@ -22,15 +22,15 @@
 </head>
 
 <body>
-    <h1>Example 1</h1>
+    <h1>Modification 1</h1>
     <div id="hello-example"></div>
-    <h1 >Example 2</h1>
+    <h1>Modification 2</h1>
     <div id="timer-example"></div>
-    <h1>Example 3</h1>
+    <h1>Modification 3</h1>
     <div id="todos-example"></div>
-    <h1>Example 4</h1>
+    <h1>Modification 4</h1>
     <div id="markdown-example"></div>
-    
+
     <script type="text/babel">
 
         //Example 1 from react.org
@@ -39,7 +39,7 @@
                 return React.createElement(
                     "div",
                     null,
-                    "Hello ",
+                    "Hola ",
                     this.props.name
                 );
             }
@@ -49,13 +49,14 @@
         class Timer extends React.Component {
             constructor(props) {
                 super(props);
-                this.state = { seconds: 0 };
+                this.state = { render: 0, time: "00:00:00", faster: "00:00:00" };
             }
 
             tick() {
                 this.setState(state => ({
-                    seconds: state.seconds + 1
+                    render: state.render + 1
                 }));
+                this.secondsToString()
             }
 
             componentDidMount() {
@@ -65,10 +66,39 @@
                 clearInterval(this.interval);
             }
 
+            timeStyle(h,m,s){
+                h = (h < 10) ? '0' + h : h;
+                m = (m < 10) ? '0' + m : m;
+                s = (s < 10) ? '0' + s : s; 
+                return {h,m,s}
+            }
+
+            secondsToString() {
+                var seconds = this.state.render;
+                //Case 1
+                var hour = Math.floor(seconds / 3600);
+                var minute = Math.floor((seconds / 60) % 60);
+                var second = seconds % 60;
+                //Case 2
+                var h = Math.floor(seconds / 100);
+                var m = Math.floor((seconds / 10) % 10);
+                var s = seconds % 10;
+                //Style
+                var data1 = this.timeStyle(hour,minute,second)
+                var data2 = this.timeStyle(h,m,s)
+                this.setState(state => ({
+                    time: data1.h + ':' + data1.m + ':' + data1.s,
+                    faster: data2.h + ':' + data2.m + ':' + data2.s
+                }))
+            }
+
+            scaleConverter() { }
+
             render() {
                 return (
                     <div>
-                        Seconds: {this.state.seconds}
+                        {this.state.time}
+                        <p>{this.state.faster}</p>
                     </div>
                 );
             }
