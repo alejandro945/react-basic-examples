@@ -1,6 +1,6 @@
-# simple-js-router
+# React Basics Examples
 
-React Basics Examples
+An introduction to React as a library/framework for web application development
 
 ## **Built With** 🛠️
 
