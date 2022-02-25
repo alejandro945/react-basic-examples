@@ -17,8 +17,7 @@
     </style>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-    <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.js"></script>    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
 <body>
@@ -173,7 +172,7 @@
         class MarkdownEditor extends React.Component {
             constructor(props) {
                 super(props);
-                this.md = new Remarkable();
+                this.md = new Remarkable({html:true});
                 this.handleChange = this.handleChange.bind(this);
                 this.state = { value: 'Hello, **world**!' };
             }
